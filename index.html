@@ -58,20 +58,20 @@
         border: 5px solid #ddd;
     }
 
-    /* Deslizador */
-    .slider-container {
-        width: 90%;
-        margin: 0 auto;
-        text-align: center;
-    }
-
-    /* Íconos */
+    /* ---- MENÚ SELECTOR DESLIZABLE ---- */
     .sim-icons {
         display: flex;
-        justify-content: center;
-        gap: 22px;
+        gap: 18px;
         margin-top: 15px;
-        flex-wrap: wrap;
+
+        overflow-x: auto;           /* Permite deslizar horizontalmente */
+        white-space: nowrap;
+        padding: 10px;
+        scroll-snap-type: x mandatory;
+    }
+
+    .sim-icons::-webkit-scrollbar {
+        display: none;              /* Oculta scrollbar */
     }
 
     .sim-icons i {
@@ -81,11 +81,14 @@
         border-radius: 12px;
         cursor: pointer;
         transition: 0.2s;
+        flex-shrink: 0;             /* evita que se achiquen */
+        scroll-snap-align: center;
     }
 
-    .sim-icons i:hover {
-        background: #d1e7ff;
-        transform: scale(1.1);
+    /* Cuando se abre un simulador → menú más chico */
+    .mini-menu i {
+        font-size: 24px !important;
+        padding: 10px !important;
     }
 
     /* Iframe donde se cargan los simuladores */
@@ -93,7 +96,7 @@
         width: 100%;
         height: 87vh;
         border: none;
-        margin-top: 20px;
+        margin-top: 10px;
         display: none;
     }
 </style>
@@ -110,18 +113,13 @@
     <h2>Simuladores de Energía</h2>
 </header>
 
-<!-- Deslizador -->
-<div class="slider-container">
-    <input type="range" min="1" max="100" value="50" style="width:100%">
-</div>
+<!-- *** RETIRADO EL DESLIZADOR AZUL *** -->
 
-<!-- Íconos -->
-<div class="sim-icons">
+<!-- Íconos → ahora deslizable -->
+<div class="sim-icons" id="menuSelector">
 
-    <!-- ⭐ Información general -->
     <i class="fas fa-info-circle" onclick="abrirSimulador('info_energias.html')" title="Introducción a las Energías Alternativas"></i>
 
-    <!-- Simuladores -->
     <i class="fas fa-bolt" onclick="abrirSimulador('https://lorenarodriguez171293.github.io/fotovol/')" title="Solar Fotovoltaica"></i>
 
     <i class="fas fa-wind" onclick="abrirSimulador('https://lorenarodriguez171293.github.io/eolica01/')" title="Energía Eólica"></i>
@@ -140,7 +138,7 @@
 
 </div>
 
-<!-- El visor donde se cargarán los simuladores -->
+<!-- Visor -->
 <iframe id="visorSimulador"></iframe>
 
 <script>
@@ -156,9 +154,11 @@ function abrirSimulador(url) {
     const visor = document.getElementById("visorSimulador");
     visor.src = url;
     visor.style.display = "block";
+
+    /* MENU SE ACHICA AUTOMÁTICAMENTE */
+    document.getElementById("menuSelector").classList.add("mini-menu");
 }
 </script>
 
 </body>
 </html>
-
